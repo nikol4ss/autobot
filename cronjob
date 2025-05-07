@@ -1,0 +1,3 @@
+*/3 * * * * root python /app/rpa_pix.py >> /var/log/cron.log 2>&1
+*/3 * * * * root python /app/rpa_bollet.py >> /var/log/cron.log 2>&1
+0 */2 * * * root python /app/rpa_card.py >> /var/log/cron.log 2>&1

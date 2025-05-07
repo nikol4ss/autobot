@@ -1,36 +1,45 @@
 import time
-from utils.insert import input
-from utils.click import click
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
-while(True):
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-    driver.get("https://app.keedpay.com.br/checkout/N0i54RNsgq4")
+from utils.click import click
+from utils.insert import input
+from utils.log import log
 
-    time.sleep(5)
+def run_checkout_pix():
+    options = Options()
+    options.add_argument("--headless")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--no-sandbox")
 
-    #---- person ----
-    email = input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[1]/div[1]/div[2]/div/input', "teste@gmail.com")
-    name = input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[1]/div[1]/div[3]/div/input', "teste123")
-    phone = input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[1]/div[1]/div[4]/div/input', '99999999999')
+    for _ in range(5):
+        log("RUN", "PIX CHECKOUT")
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-    #---- delivery ----
-    cep = input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[1]/div[2]/div[2]/div/input', '35588000')
-    andress = input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[1]/div[2]/div[3]/div/div/input', 'Rua dos guaranis')
-    number = input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[1]/div[2]/div[4]/div[1]/div/input', '111')
+        try:
+            driver.get("https://app.keedpay.com.br/checkout/N0i54RNsgq4")
+            input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[1]/div[1]/div[2]/div/input', "luciano@grupocapsul.com.br")
+            input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[1]/div[1]/div[3]/div/input', "Luciano Emanuel")
+            input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[1]/div[1]/div[4]/div/input', '37999690698')
+            input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[1]/div[2]/div[2]/div/input', '05407002')
+            input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[1]/div[2]/div[3]/div/div/input', 'Rua Cardeal Arcoverde')
+            input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[1]/div[2]/div[4]/div[1]/div/input', '1011')
+            input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[1]/div[2]/div[4]/div[2]/div/input', 'TESTE')
+            input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[1]/div[2]/div[5]/div/input', 'Pinheiros')
+            input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[1]/div[2]/div[6]/div[1]/div/input', 'São Paulo')
+            input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[1]/div[2]/div[6]/div[2]/div/input', 'SP')
+            input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[2]/div[1]/div[4]/div/div/input', '10866861602')
+            click(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[2]/div[1]/div[8]/button')
 
-    complement = input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[1]/div[2]/div[4]/div[2]/div/input', 'Perto do test2')
+            time.sleep(3)
 
-    district = input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[1]/div[2]/div[5]/div/input', 'TesteBairro')
-    city = input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[1]/div[2]/div[6]/Qdiv[1]/div/input', 'TesteCidade')
-    state = input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[1]/div[2]/div[6]/div[2]/div/input', 'TesteEstado')
+        except Exception as e:
+            log(f"ERROR {e}")
 
-    #---- payment ----
-    cpf_cnpj = input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[2]/div[1]/div[4]/div/div/input', '11111111111111')
-    button = click(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[2]/div[1]/div[8]/button')
-    cpf_cnpj = input(driver, '//*[@id="root"]/div/div[1]/div/div[2]/div[2]/div[1]/div[4]/div/div/input', '11111111112222')
-
-    time.sleep(5)
-    driver.quit()
+        finally:
+            driver.quit()
+            log("FINISHED", "PIX DONE")
+            time.sleep(2)
